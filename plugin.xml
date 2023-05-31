@@ -38,8 +38,12 @@
 		<preference name="ANDROID_DEFAULT_NOTIFICATION_ICON" default="@mipmap/ic_launcher" />
 		<preference name="ANDROID_FCM_VERSION" default="21.0.0" />
 		<preference name="ANDROID_FIREBASE_BOM_VERSION" default="26.0.0" />
-		<preference name="ANDROID_GOOGLE_SERVICES_VERSION" default="4.3.4" />
-		<preference name="ANDROID_GRADLE_TOOLS_VERSION" default="4.1.0" />
+		<preference name="ANDROID_GOOGLE_SERVICES_VERSION" default="4.3.8" />
+		<preference name="ANDROID_GRADLE_TOOLS_VERSION" default="7.4.2" />
+
+		<config-file target="AndroidManifest.xml" parent="/*">
+            <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+        </config-file>
 
 		<config-file target="AndroidManifest.xml" parent="/manifest/application">
 			<activity android:name="com.gae.scaffolder.plugin.FCMPluginActivity" android:exported="true" android:launchMode="singleTop">
