@@ -4,6 +4,9 @@ import androidx.core.app.NotificationManagerCompat;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.util.Log;
+import android.Manifest;
+import org.apache.cordova.PermissionHelper;
+import android.content.pm.PackageManager;
 
 import com.gae.scaffolder.plugin.interfaces.*;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -30,8 +33,11 @@ public class FCMPlugin extends CordovaPlugin {
     public static Map<String, Object> initialPushPayload;
     public static final String TAG = "FCMPlugin";
     private static FCMPlugin instance;
+    public CallbackContext callbackCtx;
     protected Context context;
     protected static CallbackContext jsEventBridgeCallbackContext;
+    String [] permissions = { Manifest.permission.POST_NOTIFICATIONS };
+
 
     public FCMPlugin() {}
     public FCMPlugin(Context context) {
@@ -77,7 +83,7 @@ public class FCMPlugin extends CordovaPlugin {
 
     public boolean execute(final String action, final JSONArray args, final CallbackContext callbackContext) throws JSONException {
         Log.d(TAG, "==> FCMPlugin execute: " + action);
-
+        callbackCtx = callbackContext;
         try {
             if (action.equals("ready")) {
                 callbackContext.success();
@@ -138,8 +144,14 @@ public class FCMPlugin extends CordovaPlugin {
                 });
             } else if (action.equals("deleteInstanceId")) {
                 this.deleteInstanceId(callbackContext);
-            } else if (action.equals("hasPermission")) {
-                this.hasPermission(callbackContext);
+            } else if (action.equals("requestPushPermission")) {
+                if (hasPermisssion()) {
+                    PluginResult r = new PluginResult(PluginResult.Status.OK);
+                    callbackCtx.sendPluginResult(r);
+                    callbackCtx.success();
+                } else {
+                    PermissionHelper.requestPermissions(this, 0, permissions);
+                }
             } else {
                 callbackContext.error("Method not found");
                 return false;
@@ -233,18 +245,32 @@ public class FCMPlugin extends CordovaPlugin {
         });
     }
 
-    private void hasPermission(final CallbackContext callbackContext) {
-        cordova.getThreadPool().execute(new Runnable() {
-            public void run() {
-                try {
-                    NotificationManagerCompat notificationManagerCompat =
-                        NotificationManagerCompat.from(cordova.getActivity().getApplicationContext());
-                    callbackContext.success(notificationManagerCompat.areNotificationsEnabled() ? 1 : 0);
-                } catch (Exception e) {
-                    callbackContext.error(e.getMessage());
+    public void onRequestPermissionResult(int requestCode, String[] permissions, int[] grantResults) throws JSONException {
+
+        PluginResult result;
+        if(callbackCtx != null) {
+            for (int r : grantResults) {
+                if (r == PackageManager.PERMISSION_DENIED) {
+                    result = new PluginResult(PluginResult.Status.ILLEGAL_ACCESS_EXCEPTION);
+                    callbackCtx.sendPluginResult(result);
+                    callbackCtx.success();
+                    return;
                 }
+
             }
-        });
+            result = new PluginResult(PluginResult.Status.OK);
+            callbackCtx.sendPluginResult(result);
+            callbackCtx.success();
+        }
+    }
+
+    public boolean hasPermisssion() {
+        for(String p : permissions) {
+            if (!PermissionHelper.hasPermission(this, p)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     private JSONObject exceptionToJson(final Exception exception) throws JSONException {
