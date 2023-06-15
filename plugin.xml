@@ -39,7 +39,7 @@
 		<preference name="ANDROID_FCM_VERSION" default="23.1.2" />
 		<preference name="ANDROID_FIREBASE_BOM_VERSION" default="32.1.0" />
 		<preference name="ANDROID_GOOGLE_SERVICES_VERSION" default="4.3.15" />
-		<preference name="ANDROID_GRADLE_TOOLS_VERSION" default="7.5.1" />
+		<preference name="ANDROID_GRADLE_TOOLS_VERSION" default="7.4.2" />
 
 		<config-file target="AndroidManifest.xml" parent="/*">
             <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
