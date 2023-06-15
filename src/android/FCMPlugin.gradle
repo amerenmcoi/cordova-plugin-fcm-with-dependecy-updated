@@ -32,7 +32,7 @@ buildscript {
     }
     dependencies {
         // Load system enviroment defined values, or, if unavailable, plugin defaults
-        def ANDROID_GOOGLE_SERVICES_VERSION = System.getenv('ANDROID_GOOGLE_SERVICES_VERSION') ?: '4.3.15'
+        def ANDROID_GOOGLE_SERVICES_VERSION = System.getenv('ANDROID_GOOGLE_SERVICES_VERSION') ?: '4.3.8'
         def ANDROID_GRADLE_TOOLS_VERSION = System.getenv('ANDROID_GRADLE_TOOLS_VERSION') ?: '7.4.2'      
         try {
             // Load configuration from install variables (package.json) two directories above
@@ -68,8 +68,8 @@ repositories {
 }
 dependencies {
     // Load system enviroment defined values, or, if unavailable, plugin defaults
-    def ANDROID_FCM_VERSION = System.getenv('ANDROID_FCM_VERSION') ?: '23.1.2'
-    def ANDROID_FIREBASE_BOM_VERSION = System.getenv('ANDROID_FIREBASE_BOM_VERSION') ?: '32.1.0'
+    def ANDROID_FCM_VERSION = System.getenv('ANDROID_FCM_VERSION') ?: '21.0.0'
+    def ANDROID_FIREBASE_BOM_VERSION = System.getenv('ANDROID_FIREBASE_BOM_VERSION') ?: '26.0.0'
     try {
         // Load configuration from install variables (package.json) two directories above
         def PLUGIN_CONFIG = new groovy.json.JsonSlurper().parseText(file("${projectDir}/../../package.json").text).cordova.plugins['cordova-plugin-fcm-with-dependecy-updated']
