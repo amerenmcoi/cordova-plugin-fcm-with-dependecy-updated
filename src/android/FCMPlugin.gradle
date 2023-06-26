@@ -106,6 +106,8 @@ dependencies {
         // https://mvnrepository.com/artifact/com.google.firebase/firebase-messaging
         implementation "com.google.firebase:firebase-messaging:${ANDROID_FCM_VERSION}"
     }
+
+    implementation "com.google.firebase:firebase-analytics:21.3.0"
 }
 // apply plugin: 'com.google.gms.google-services'
 // class must be used instead of id(string) to be able to apply plugin from non-root gradle file
