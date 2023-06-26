@@ -104,7 +104,7 @@ dependencies {
         implementation platform("com.google.firebase:firebase-bom:${ANDROID_FIREBASE_BOM_VERSION}")
         // implementation "com.google.firebase:firebase-messaging"
         // https://mvnrepository.com/artifact/com.google.firebase/firebase-messaging
-        implementation 'com.google.firebase:firebase-messaging:23.1.5'
+        implementation "com.google.firebase:firebase-messaging:${ANDROID_FCM_VERSION}"
     }
 }
 // apply plugin: 'com.google.gms.google-services'
