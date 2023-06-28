@@ -3,6 +3,8 @@ package com.gae.scaffolder.plugin;
 import androidx.core.app.NotificationManagerCompat;
 import android.app.NotificationManager;
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.util.Log;
 import android.Manifest;
 import org.apache.cordova.PermissionHelper;
@@ -75,9 +77,25 @@ public class FCMPlugin extends CordovaPlugin {
     public void initialize(CordovaInterface cordova, CordovaWebView webView) {
         super.initialize(cordova, webView);
         Log.d(TAG, "==> FCMPlugin initialize");
+    }
 
-        FirebaseMessaging.getInstance().subscribeToTopic("android");
-        FirebaseMessaging.getInstance().subscribeToTopic("all");
+    public void onNewIntent(Intent intent) {
+        Bundle bundle = intent.getExtras();
+
+        try {
+            if (bundle != null) {
+                JSONObject jo = new JSONObject();
+                for (String key : bundle.keySet()) {
+                    jo.put(key, bundle.get(key));
+                    Log.d(TAG, "\tonNewIntent Payload: " + key + " => " + bundle.get(key));
+                }
+
+                jo.put("wasTapped", true);
+                FCMPlugin.dispatchJSEvent(notificationEventName, jo.toString());
+            }
+        } catch (Exception e) {
+            Log.d(TAG, "\tonNewIntent Payload Error: " + e.getMessage());
+        }
     }
 
     public boolean execute(final String action, final JSONArray args, final CallbackContext callbackContext) throws JSONException {
