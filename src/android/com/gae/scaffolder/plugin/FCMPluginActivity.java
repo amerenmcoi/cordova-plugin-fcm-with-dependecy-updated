@@ -31,11 +31,12 @@ public class FCMPluginActivity extends Activity {
 
     private void sendPushPayload() {
         Bundle intentExtras = getIntent().getExtras();
+
         if(intentExtras == null) {
             return;
         }
         Log.d(TAG, "==> USER TAPPED NOTIFICATION");
-        Map<String, Object> data = new HashMap<String, Object>();
+        Map<String, Object> data = new HashMap();
         data.put("wasTapped", true);
         for (String key : intentExtras.keySet()) {
             Object value = intentExtras.get(key);
@@ -71,5 +72,4 @@ public class FCMPluginActivity extends Activity {
         super.onStop();
         Log.d(TAG, "==> FCMPluginActivity onStop");
     }
-
 }

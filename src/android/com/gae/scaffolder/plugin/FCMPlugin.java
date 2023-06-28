@@ -1,6 +1,5 @@
 package com.gae.scaffolder.plugin;
 
-import androidx.core.app.NotificationManagerCompat;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
@@ -11,10 +10,6 @@ import org.apache.cordova.PermissionHelper;
 import android.content.pm.PackageManager;
 
 import com.gae.scaffolder.plugin.interfaces.*;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.installations.FirebaseInstallations;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 import org.apache.cordova.CallbackContext;
@@ -25,7 +20,6 @@ import org.apache.cordova.PluginResult;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.util.Map;
 
 public class FCMPlugin extends CordovaPlugin {
@@ -78,6 +72,7 @@ public class FCMPlugin extends CordovaPlugin {
         super.initialize(cordova, webView);
         Log.d(TAG, "==> FCMPlugin initialize");
     }
+
 
     public void onNewIntent(Intent intent) {
         Bundle bundle = intent.getExtras();
@@ -163,8 +158,6 @@ public class FCMPlugin extends CordovaPlugin {
                 this.deleteInstanceId(callbackContext);
             } else if (action.equals("requestPushPermission")) {
                 if (hasPermisssion()) {
-                    PluginResult r = new PluginResult(PluginResult.Status.OK);
-                    callbackCtx.sendPluginResult(r);
                     callbackCtx.success();
                 } else {
                     PermissionHelper.requestPermissions(this, 0, permissions);
@@ -360,6 +353,7 @@ public class FCMPlugin extends CordovaPlugin {
 
     @Override
     public void onDestroy() {
+        Log.d(TAG, "onDestroy");
         initialPushPayload = null;
         jsEventBridgeCallbackContext = null;
     }
