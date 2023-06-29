@@ -1,18 +1,23 @@
 package com.gae.scaffolder.plugin;
 
 import android.app.Activity;
+import android.app.Notification;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+
+import androidx.core.app.NotificationCompat;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class FCMPluginActivity extends Activity {
     private static String TAG = "FCMPlugin";
+    private static Bundle bundle;
 
     /*
      * this activity will be started if the user touches a notification that we own.
@@ -23,6 +28,7 @@ public class FCMPluginActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+//        bundle = savedInstanceState;
         Log.d(TAG, "==> FCMPluginActivity onCreate");
         this.sendPushPayload();
         finish();
@@ -31,12 +37,15 @@ public class FCMPluginActivity extends Activity {
 
     private void sendPushPayload() {
         Bundle intentExtras = getIntent().getExtras();
-
+//        Uri intentData = getIntent().getData();
+//
+//        Log.d(TAG, "sendPushPayload data\n" + intentData);
+//        Log.d(TAG, "sendPushPayload data\n" + "savedInstanceState.toString()\n" + savedInstanceState.toString());
         if(intentExtras == null) {
             return;
         }
         Log.d(TAG, "==> USER TAPPED NOTIFICATION");
-        Map<String, Object> data = new HashMap();
+        Map<String, Object> data = new HashMap<String, Object>();
         data.put("wasTapped", true);
         for (String key : intentExtras.keySet()) {
             Object value = intentExtras.get(key);
@@ -70,6 +79,14 @@ public class FCMPluginActivity extends Activity {
     @Override
     public void onStop() {
         super.onStop();
+
         Log.d(TAG, "==> FCMPluginActivity onStop");
     }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        super.onSaveInstanceState(bundle);
+    }
+
 }

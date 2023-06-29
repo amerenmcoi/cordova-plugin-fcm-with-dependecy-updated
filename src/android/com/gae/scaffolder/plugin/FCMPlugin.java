@@ -1,5 +1,8 @@
 package com.gae.scaffolder.plugin;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.app.NotificationManagerCompat;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
@@ -10,6 +13,10 @@ import org.apache.cordova.PermissionHelper;
 import android.content.pm.PackageManager;
 
 import com.gae.scaffolder.plugin.interfaces.*;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.installations.FirebaseInstallations;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 import org.apache.cordova.CallbackContext;
@@ -20,7 +27,11 @@ import org.apache.cordova.PluginResult;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 public class FCMPlugin extends CordovaPlugin {
     public static String notificationEventName = "notification";
@@ -71,6 +82,18 @@ public class FCMPlugin extends CordovaPlugin {
     public void initialize(CordovaInterface cordova, CordovaWebView webView) {
         super.initialize(cordova, webView);
         Log.d(TAG, "==> FCMPlugin initialize");
+    }
+
+    @Override
+    public void onRestoreStateForActivityResult(Bundle state, CallbackContext callbackContext) {
+        super.onRestoreStateForActivityResult(state, callbackContext);
+        Map<String, Object> data = new HashMap<String, Object>();
+        for (String key : state.keySet()) {
+            data.put(key, state.get(key));
+        }
+        initialPushPayload = data;
+        sendPushPayload(initialPushPayload);
+        Log.d(TAG, "==> FCMPlugin " + "onRestoreStateForActivityResult " + state.toString());
     }
 
 
@@ -160,7 +183,16 @@ public class FCMPlugin extends CordovaPlugin {
                 if (hasPermisssion()) {
                     callbackCtx.success();
                 } else {
-                    PermissionHelper.requestPermissions(this, 0, permissions);
+                    cordova.getThreadPool().execute(new Runnable() {
+                        public void run() {
+                            try {
+                                Context context = cordova.getActivity();
+                                PermissionHelper.requestPermissions(FCMPlugin.this, 0, permissions);
+                            } catch (Exception e) {
+                                callbackContext.error(e.getMessage());
+                            }
+                        }
+                    });
                 }
             } else {
                 callbackContext.error("Method not found");
@@ -324,6 +356,7 @@ public class FCMPlugin extends CordovaPlugin {
 
     public static void setInitialPushPayload(Map<String, Object> payload) {
         if(initialPushPayload == null) {
+            Log.d(TAG, "initialPushPayload is null");
             initialPushPayload = payload;
         }
     }
@@ -354,8 +387,23 @@ public class FCMPlugin extends CordovaPlugin {
     @Override
     public void onDestroy() {
         Log.d(TAG, "onDestroy");
-        initialPushPayload = null;
-        jsEventBridgeCallbackContext = null;
+//        initialPushPayload = null;
+//        jsEventBridgeCallbackContext = null;
+    }
+
+    @Override
+    public Bundle onSaveInstanceState() {
+        Bundle bundle = super.onSaveInstanceState();
+        if (bundle == null) {
+            return null;
+        }
+        Map<String, Object> data = new HashMap<String, Object>();
+        for (String key : bundle.keySet()) {
+            data.put(key, bundle.get(key));
+        }
+        initialPushPayload = data;
+        Log.d(TAG, "initialPushPayload onSaveInstanceState\n" + initialPushPayload.toString());
+        return bundle;
     }
 
     protected Context getContext() {
