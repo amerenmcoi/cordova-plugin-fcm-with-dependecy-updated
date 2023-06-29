@@ -84,19 +84,6 @@ public class FCMPlugin extends CordovaPlugin {
         Log.d(TAG, "==> FCMPlugin initialize");
     }
 
-    @Override
-    public void onRestoreStateForActivityResult(Bundle state, CallbackContext callbackContext) {
-        super.onRestoreStateForActivityResult(state, callbackContext);
-        Map<String, Object> data = new HashMap<String, Object>();
-        for (String key : state.keySet()) {
-            data.put(key, state.get(key));
-        }
-        initialPushPayload = data;
-        sendPushPayload(initialPushPayload);
-        Log.d(TAG, "==> FCMPlugin " + "onRestoreStateForActivityResult " + state.toString());
-    }
-
-
     public void onNewIntent(Intent intent) {
         Bundle bundle = intent.getExtras();
 
@@ -183,16 +170,7 @@ public class FCMPlugin extends CordovaPlugin {
                 if (hasPermisssion()) {
                     callbackCtx.success();
                 } else {
-                    cordova.getThreadPool().execute(new Runnable() {
-                        public void run() {
-                            try {
-                                Context context = cordova.getActivity();
-                                PermissionHelper.requestPermissions(FCMPlugin.this, 0, permissions);
-                            } catch (Exception e) {
-                                callbackContext.error(e.getMessage());
-                            }
-                        }
-                    });
+                    PermissionHelper.requestPermissions(this, 0, permissions);
                 }
             } else {
                 callbackContext.error("Method not found");
@@ -233,61 +211,10 @@ public class FCMPlugin extends CordovaPlugin {
 
     public void getToken(final TokenListeners<String, JSONObject> callback) {
         callback.success("");
-
-//        try {
-//            FirebaseInstallations.getInstance().getId().addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
-//                @Override
-//                public void onComplete(Task<InstanceIdResult> task) {
-//                    if (!task.isSuccessful()) {
-//                        Log.w(TAG, "getInstanceId failed", task.getException());
-//                        try {
-//                            callback.error(exceptionToJson(task.getException()));
-//                        }
-//                        catch (JSONException jsonErr) {
-//                            Log.e(TAG, "Error when parsing json", jsonErr);
-//                        }
-//                        return;
-//                    }
-//
-//                    // Get new Instance ID token
-//                    String newToken = task.getResult().getToken();
-//
-//                    Log.i(TAG, "\tToken: " + newToken);
-//                    callback.success(newToken);
-//                }
-//            });
-//
-//            FirebaseInstanceId.getInstance().getInstanceId().addOnFailureListener(new OnFailureListener() {
-//                @Override
-//                public void onFailure(final Exception e) {
-//                    try {
-//                        Log.e(TAG, "Error retrieving token: ", e);
-//                        callback.error(exceptionToJson(e));
-//                    } catch (JSONException jsonErr) {
-//                        Log.e(TAG, "Error when parsing json", jsonErr);
-//                    }
-//                }
-//            });
-//        } catch (Exception e) {
-//            Log.w(TAG, "\tError retrieving token", e);
-//            try {
-//                callback.error(exceptionToJson(e));
-//            } catch(JSONException je) {}
-//        }
     }
 
     private void deleteInstanceId(final CallbackContext callbackContext) {
         callbackContext.success("");
-//        cordova.getThreadPool().execute(new Runnable() {
-//            public void run() {
-//                try {
-//                    FirebaseInstanceId.getInstance().deleteInstanceId();
-//                    callbackContext.success();
-//                } catch (Exception e) {
-//                    callbackContext.error(e.getMessage());
-//                }
-//            }
-//        });
     }
 
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) throws JSONException {
@@ -355,8 +282,7 @@ public class FCMPlugin extends CordovaPlugin {
     }
 
     public static void setInitialPushPayload(Map<String, Object> payload) {
-        if(initialPushPayload == null) {
-            Log.d(TAG, "initialPushPayload is null");
+        if (initialPushPayload == null) {
             initialPushPayload = payload;
         }
     }
@@ -382,28 +308,6 @@ public class FCMPlugin extends CordovaPlugin {
         } catch (Exception e) {
             Log.d(TAG, "\tERROR sendTokenRefresh: " + e.getMessage());
         }
-    }
-
-    @Override
-    public void onDestroy() {
-        Log.d(TAG, "onDestroy");
-//        initialPushPayload = null;
-//        jsEventBridgeCallbackContext = null;
-    }
-
-    @Override
-    public Bundle onSaveInstanceState() {
-        Bundle bundle = super.onSaveInstanceState();
-        if (bundle == null) {
-            return null;
-        }
-        Map<String, Object> data = new HashMap<String, Object>();
-        for (String key : bundle.keySet()) {
-            data.put(key, bundle.get(key));
-        }
-        initialPushPayload = data;
-        Log.d(TAG, "initialPushPayload onSaveInstanceState\n" + initialPushPayload.toString());
-        return bundle;
     }
 
     protected Context getContext() {

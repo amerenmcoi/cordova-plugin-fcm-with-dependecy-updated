@@ -28,13 +28,19 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     @Override
     public void handleIntent(Intent intent) {
         super.handleIntent(intent);
-
         Bundle bundle = intent.getExtras();
+
+        if (bundle == null) {
+            return;
+        }
         Map<String, Object> data = new HashMap<String, Object>();
+        data.put("wasTapped", true);
         for (String key : bundle.keySet()) {
             data.put(key, bundle.get(key));
         }
+        Log.d("handleIntent", data.toString());
         FCMPlugin.setInitialPushPayload(data);
+        FCMPlugin.sendPushPayload(data);
     }
 
     /**
@@ -73,7 +79,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         Log.d(TAG, "\tNotification Data: " + data.toString());
         FCMPlugin.setInitialPushPayload(data);
         FCMPlugin.sendPushPayload(data);
-//        FCMPlugin.sendPushPayload(data);
     }
     // [END receive_message]
 }

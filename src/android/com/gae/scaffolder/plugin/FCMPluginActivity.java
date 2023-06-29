@@ -17,7 +17,6 @@ import java.util.Map;
 
 public class FCMPluginActivity extends Activity {
     private static String TAG = "FCMPlugin";
-    private static Bundle bundle;
 
     /*
      * this activity will be started if the user touches a notification that we own.
@@ -28,7 +27,6 @@ public class FCMPluginActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        bundle = savedInstanceState;
         Log.d(TAG, "==> FCMPluginActivity onCreate");
         this.sendPushPayload();
         finish();
@@ -37,10 +35,7 @@ public class FCMPluginActivity extends Activity {
 
     private void sendPushPayload() {
         Bundle intentExtras = getIntent().getExtras();
-//        Uri intentData = getIntent().getData();
-//
-//        Log.d(TAG, "sendPushPayload data\n" + intentData);
-//        Log.d(TAG, "sendPushPayload data\n" + "savedInstanceState.toString()\n" + savedInstanceState.toString());
+
         if(intentExtras == null) {
             return;
         }
@@ -81,12 +76,6 @@ public class FCMPluginActivity extends Activity {
         super.onStop();
 
         Log.d(TAG, "==> FCMPluginActivity onStop");
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        super.onSaveInstanceState(bundle);
     }
 
 }
