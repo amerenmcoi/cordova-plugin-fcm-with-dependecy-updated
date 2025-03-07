@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core'
-import { Plugin } from '@ionic-native/core'
+import { Plugin } from '@awesome-cordova-plugins/core'
 import { Observable, Subject } from 'rxjs'
 import type { FCMPlugin } from '../../../typings/FCMPlugin'
 import type { IChannelConfiguration } from '../../../typings/IChannelConfiguration'
