@@ -18,7 +18,7 @@ var __decorate =
         return c > 3 && r && Object.defineProperty(target, key, r), r
     }
 import { Injectable } from '@angular/core'
-import { Plugin } from '@ionic-native/core'
+import { Plugin } from '@awesome-cordova-plugins/core'
 import { Subject } from 'rxjs'
 
 function FCM() {}

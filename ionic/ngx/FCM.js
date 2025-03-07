@@ -19,7 +19,7 @@ var __decorate =
     }
 import { Injectable } from '@angular/core'
 import { Subject } from 'rxjs'
-import { IonicNativePlugin } from '@ionic-native/core'
+import { AwesomeCordovaNativePlugin } from '@awesome-cordova-plugins/core'
 
 function FCM() {}
 FCM.prototype.clearAllNotifications = function () {
@@ -72,12 +72,12 @@ FCM.plugin = 'cordova-plugin-fcm-with-dependecy-updated'
 FCM.pluginRef = 'FCM'
 FCM.repo = 'https://github.com/andrehtissot/cordova-plugin-fcm-with-dependecy-updated'
 FCM.platforms = ['Android', 'iOS']
-FCM.installed = IonicNativePlugin.installed
-FCM.getPlugin = IonicNativePlugin.getPlugin
-FCM.getPluginName = IonicNativePlugin.getPluginName
-FCM.getPluginRef = IonicNativePlugin.getPluginRef
-FCM.getPluginInstallName = IonicNativePlugin.getPluginInstallName
-FCM.getSupportedPlatforms = IonicNativePlugin.getSupportedPlatforms
+FCM.installed = AwesomeCordovaNativePlugin.installed
+FCM.getPlugin = AwesomeCordovaNativePlugin.getPlugin
+FCM.getPluginName = AwesomeCordovaNativePlugin.getPluginName
+FCM.getPluginRef = AwesomeCordovaNativePlugin.getPluginRef
+FCM.getPluginInstallName = AwesomeCordovaNativePlugin.getPluginInstallName
+FCM.getSupportedPlatforms = AwesomeCordovaNativePlugin.getSupportedPlatforms
 FCM = __decorate([Injectable()], FCM)
 
 export { FCM }
