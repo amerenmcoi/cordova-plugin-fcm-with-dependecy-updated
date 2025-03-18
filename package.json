@@ -45,6 +45,7 @@
         "tslint-microsoft-contrib": "^6.2.0"
     },
     "dependencies": {
+        "@awesome-cordova-plugins/core": "^6.15.0",
         "typescript": "^4.1.3"
     }
 }
