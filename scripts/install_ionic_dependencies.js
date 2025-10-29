@@ -28,7 +28,7 @@ const shouldInstallIonicDependencies = function () {
     return !!(
         packageData &&
         packageData.dependencies &&
-        packageData.dependencies['@ionic-native/core']
+        packageData.dependencies['@awesome-cordova-plugins/core']
     );
 };
 

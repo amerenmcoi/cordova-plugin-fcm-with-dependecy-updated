@@ -18,8 +18,8 @@ var __decorate =
         return c > 3 && r && Object.defineProperty(target, key, r), r
     }
 import { Injectable } from '@angular/core'
-import { Plugin } from '@ionic-native/core'
 import { Subject } from 'rxjs'
+import { Plugin } from '@awesome-cordova-plugins/core'
 
 function FCM() {}
 FCM.prototype.clearAllNotifications = function () {
