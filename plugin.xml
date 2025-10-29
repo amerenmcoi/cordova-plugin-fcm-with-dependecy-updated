@@ -124,7 +124,7 @@
                 <source url="https://github.com/CocoaPods/Specs.git"/>
 			</config>
 			<pods>
-				<pod name="Firebase/Messaging" spec="$IOS_FIREBASE_MESSAGING_VERSION"/>
+				<pod name="Firebase/Messaging" spec="~> 8.15.0"/>
 			</pods>
 		</podspec>
 	</platform>
