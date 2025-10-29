@@ -1,5 +1,13 @@
 # Changelog
 
+## Version 8
+
+### Version 8.0.0 (10/29/2025)
+- IOS_FIREBASE_MESSAGING_VERSION upgraded to 8.15.0;
+- Updated Rollup related dependencies
+- Removed @ionic-native/core
+- Added @awesome-cordova-plugins/core
+
 ## Version 7
 
 ### Version 7.8.0 (03/02/2020)
